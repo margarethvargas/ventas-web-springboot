@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Principal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">Sistema de Ventas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <!-- URL del controlador MenuController (menu) con @{...} -->
+                    <a class="nav-link" th:href="@{/menu}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <!-- URL del controlador UserController (listarUsuarios) con @{...} -->
+                    <a class="nav-link" th:href="@{/user}">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <!-- La URL `/logout` es una ruta especial proporcionada por Spring Security -->
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link nav-link">Cerrar Sesión</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="ms-auto d-flex align-items-center">
+            <!-- Solo está visible para los usuarios autenticados -->
+            <div class="text-white me-3" sec:authorize="isAuthenticated()">
+                <i class="bi bi-person-circle me-1"></i>
+                <!-- Mostramos datos del usuario autenticado -->
+                <span sec:authentication="name">Username</span>
+                <span class="badge bg-light text-primary ms-2" sec:authentication="principal.authorities">Roles</span>
+            </div>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-outline-light">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2>Bienvenido al Sistema</h2>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestión de Usuarios</h5>
+                    <p class="card-text">Administre los usuarios del sistema.</p>
+                    <a th:href="@{/user}" class="btn btn-primary">Ir a Usuarios</a>
+                </div>
+            </div>
+        </div>
+        <!-- Aquí puedes agregar más tarjetas para otras opciones del menú -->
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
