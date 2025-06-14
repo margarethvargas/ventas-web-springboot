@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Usuarios</title>
+</head>
+<body>
+
+    <div align="center">
+        <div sec:authorize="isAuthenticated()">
+            Bienvenido <b><span sec:authentication="name">Username</span></b>
+            &nbsp;
+            <b><span sec:authentication="principal.authorities">Roles</span></b>
+        </div>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Salir">
+        </form>
+        <h1>Listado de usuarios</h1>
+        <table border="1" cellpadding="10">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th sec:authorize="hasAnyAuthority('ADMIN','EDITOR')">Acciones</th>
+            </tr>
+            <tr th:each="user : ${listaUsers}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td sec:authorize="hasAnyAuthority('ADMIN','EDITOR')">
+                    <a th:href="@{/user/editar/{id}(id=${user.id})}">Editar</a>
+                    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/user/eliminar/{id}(id=${user.id})}">Eliminar</a>
+                </td>
+            </tr>
+        </table>
+
+        <div sec:authorize="hasAnyAuthority('CREATOR','ADMIN')">
+            <a href="/user/nuevo">Nuevo usuario</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
